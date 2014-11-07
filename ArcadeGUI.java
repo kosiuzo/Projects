@@ -9,25 +9,75 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.*;
 import java.awt.*;
+import javax.swing.*;
+import javax.swing.JFrame;
 
 public class ArcadeGUI extends JPanel {
 
-    public JLabel ttt;
-    public JLabel bljk;
-    
+    public static JLabel ticTacLabel, blackJackLabel;
+
+
     public ArcadeGUI () {
-	
+    MListener listener = new MListener();
+    ticTacLabel = new JLabel("TicTacToe Label/Button: Insert Image of what you want or put a button here and align it the way you want ");
+    blackJackLabel = new JLabel("BlackJack Label/Button: Insert Image of what you want or put a button here and align it the way you want ");
+    ticTacLabel.addMouseListener(listener);
+    blackJackLabel.addMouseListener(listener);
+    ticTacLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    blackJackLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+    add(ticTacLabel);
+    add(blackJackLabel);
 	setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-	//BufferedImage tttImg = ImageIO.read(new File("tttImg.png");
-	//ttt = new JButton(new ImageIcon(tttImg));
 
-	//BufferedImage bljkImg = ImageIO.read(new File("bljkImg.png");
-	//bljk = new JButton(new ImageIcon(bljkImg));
 
     }
     
-    static class tttAL implements ActionListener {
-	public void actionPerformed(.....)
-    }
+ 	public static class MListener implements MouseListener
+ 	{
+	
+	public void mouseClicked(MouseEvent event)
+	{
+		Object source = event.getSource();
+		if(source == ticTacLabel)
+		{
+			TicTacToePanel panel = new TicTacToePanel();
+			ArcadeFrame.frame.setContentPane(panel);
+			ArcadeFrame.frame.validate();
+			ArcadeFrame.frame.repaint();
+			System.out.println("You have been sent to the TicTacToe panel");
+
+		}	
+		else if(source == blackJackLabel)
+		{
+			BlackJackPanel panel = new BlackJackPanel();
+			ArcadeFrame.frame.setContentPane(panel);
+			ArcadeFrame.frame.validate();
+			ArcadeFrame.frame.repaint();
+			System.out.println("You have been sent to the black jack panel");
+		}
+	 
+  	}
+
+  	public void mouseEntered(MouseEvent event)
+  	{
+
+  	}
+
+  	public void mouseExited(MouseEvent event)
+  	{
+
+  	}
+
+  	public void mouseReleased(MouseEvent event)
+  	{
+
+  	}
+
+  	public void mousePressed(MouseEvent event)
+  	{
+
+  	}
+
+  }
 
 }
