@@ -18,7 +18,7 @@ public class ArcadeFrame {
     public ArcadeFrame () {
 	frame = new JFrame("Arcade");
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	frame.setPreferredSize(new Dimension(800,800));
+	frame.setPreferredSize(new Dimension(600,500));
 
 	menuLister listener = new menuLister();
 
