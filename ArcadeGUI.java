@@ -15,12 +15,14 @@ import javax.swing.JFrame;
 public class ArcadeGUI extends JPanel {
 
     public static JLabel ticTacLabel, blackJackLabel;
+    public static ImageIcon ticTacToeImage = new ImageIcon("Images/tictactoe.png");
+    public static ImageIcon blackJackImage = new ImageIcon("Images/blackjack.png");
 
 
     public ArcadeGUI () {
     MListener listener = new MListener();
-    ticTacLabel = new JLabel("TicTacToe Label/Button: Insert Image of what you want or put a button here and align it the way you want ");
-    blackJackLabel = new JLabel("BlackJack Label/Button: Insert Image of what you want or put a button here and align it the way you want ");
+    ticTacLabel=new JLabel(ticTacToeImage);
+    blackJackLabel = new JLabel(blackJackImage);
     ticTacLabel.addMouseListener(listener);
     blackJackLabel.addMouseListener(listener);
     ticTacLabel.setAlignmentX(Component.CENTER_ALIGNMENT);

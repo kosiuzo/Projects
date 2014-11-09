@@ -9,11 +9,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.*;
 import java.awt.*;
 import java.awt.Font;
+import java.util.*;
 public class TicTacToePanel extends JPanel 
 {
 	//public JLabel label = new JLabel("TicTacToe Panel add customization as you would like ");
+	public static Stack<Integer> undoStack;
 	public static int player1Wins,player2Wins,compWins;
-	public static JLabel playerTurn, gameTitle, player1, player2, p1WinLabel, p2WinLabel;
+	public static JLabel playerTurn, gameTitle, player1, player2, p1WinLabel, p2WinLabel,errorMessage;
 	public static JButton playAgain, undo;
 	public static JLabel[][] gameArray = new JLabel[5][5];
 	public static ImageIcon vertical = new ImageIcon("Images/vertical.png");
@@ -23,10 +25,13 @@ public class TicTacToePanel extends JPanel
 	public static ImageIcon open = new ImageIcon("Images/open.png");
 	public static boolean computer;
 	public static CutThroatComputerPlayer comp;
+	public static TicTacToePlayer controlReverse = new TicTacToePlayer();
 	private static JPanel gameBoard, innerBoard1, innerBoard2, innerBoard3, innerBoard4, innerBoard5, titlePanel, player2Panel,gameTitlePanel, player1Panel;
 	//private JLabel test;
 	public TicTacToePanel()
 	{
+
+		undoStack = new Stack<Integer>();
 		player1Wins=0;
 		player2Wins=0;
 		compWins=0;
@@ -36,6 +41,11 @@ public class TicTacToePanel extends JPanel
 		titlePanel.setLayout(new BoxLayout(titlePanel,BoxLayout.X_AXIS));
 		Font font = new Font("Jokerman", Font.PLAIN, 35);
 		
+		//Error Message to display
+		errorMessage = new JLabel("Choose another Space");
+		errorMessage.setFont(font);
+		errorMessage.setVisible(false);
+
 		//Setting Player 1
 		player1 = new JLabel("Player 1");
 		p1WinLabel = new JLabel(player1Wins + ""+ " Wins");
@@ -75,6 +85,7 @@ public class TicTacToePanel extends JPanel
 		//Setting up undo button
 		undo = new JButton("UNDO");
 		undo.setFont(font);
+		undo.addActionListener(new BListener());
 
 
 		//Adding to the titlePanel
@@ -97,6 +108,7 @@ public class TicTacToePanel extends JPanel
 		gameBoard.add(innerBoard4);
 		gameBoard.add(innerBoard5);
 		add(gameBoard);
+		add(errorMessage);
 		add(undo);
 		comp = new CutThroatComputerPlayer();
 		
@@ -106,7 +118,31 @@ public class TicTacToePanel extends JPanel
 	{
 		public void actionPerformed(ActionEvent event)
 		{
-			reset();
+			Object source = event.getSource();
+			if(source == playAgain)
+				reset();
+			else if(source == undo)
+			{
+				if(!undoStack.isEmpty())
+				{
+					System.out.println("Undo Stack Number"+undoStack.peek());
+					int space = undoStack.pop();
+					controlReverse.reverseSpace(space);
+					if(TicTacToePanel.playerTurn.getText().equals("Player 1"))
+					{
+
+					TicTacToePanel.playerTurn.setText("Player 2");
+					player1Panel.setBackground(Color.white);
+					player2Panel.setBackground(Color.RED);
+					}
+					else if(TicTacToePanel.playerTurn.getText().equals("Player 2"))
+					{
+					TicTacToePanel.playerTurn.setText("Player 1");
+					player2Panel.setBackground(Color.white);
+					player1Panel.setBackground(Color.RED);
+					}
+				}
+			}
 		}
 	}
 	public static class MListener implements MouseListener
@@ -132,11 +168,16 @@ public class TicTacToePanel extends JPanel
 		}
 		if(source == gameArray[0][0])
 		{
+			if(gameArray[0][0].getIcon() == xIcon || gameArray[0][0].getIcon() == oIcon )
+			{
+				errorMessage.setVisible(true);
+			}
 			if( (gameArray[0][0].getIcon() == open) && (playerTurn.getText().equals("Player 1") ))
 			{	
 			gameArray[0][0].setIcon(xIcon);
 			gameArray[0][0].repaint();
-			
+			errorMessage.setVisible(false);
+			undoStack.push(7);
 			playerTurn.setText("Player 2");
 			player2Panel.setBackground(Color.RED);
 			player1Panel.setBackground(Color.white);
@@ -224,6 +265,8 @@ public class TicTacToePanel extends JPanel
 			{
 				gameArray[0][0].setIcon(oIcon);
 				gameArray[0][0].repaint();
+				errorMessage.setVisible(false);
+				undoStack.push(7);
 				playerTurn.setText("Player 1");
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
@@ -233,7 +276,6 @@ public class TicTacToePanel extends JPanel
 				player2Wins++;
 				p2WinLabel.setText(player2Wins + ""+ " Wins");
 				playAgain.setVisible(true);
-				
 				gameTitle.setText("Player 2 Wins");
 				}
 				if(checkCat())
@@ -248,10 +290,16 @@ public class TicTacToePanel extends JPanel
 		}	
 		else if(source == gameArray[0][2])
 		{
+			if(gameArray[0][2].getIcon() == xIcon || gameArray[0][2].getIcon() == oIcon )
+			{
+				errorMessage.setVisible(true);
+			}
 			if( (gameArray[0][2].getIcon() == open) && (playerTurn.getText().equals("Player 1") ))
 			{	
+			errorMessage.setVisible(false);
 			gameArray[0][2].setIcon(xIcon);
 			gameArray[0][2].repaint();
+			undoStack.push(8);
 			playerTurn.setText("Player 2");
 			player2Panel.setBackground(Color.RED);
 			player1Panel.setBackground(Color.white);
@@ -338,6 +386,8 @@ public class TicTacToePanel extends JPanel
 			{
 				gameArray[0][2].setIcon(oIcon);
 				gameArray[0][2].repaint();
+				undoStack.push(8);
+				errorMessage.setVisible(false);
 				playerTurn.setText("Player 1");
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
@@ -360,10 +410,16 @@ public class TicTacToePanel extends JPanel
 		}
 		else if(source == gameArray[0][4])
 		{
+			if(gameArray[0][4].getIcon() == xIcon || gameArray[0][4].getIcon() == oIcon )
+			{
+				errorMessage.setVisible(true);
+			}
 			if( (gameArray[0][4].getIcon() == open) && (playerTurn.getText().equals("Player 1") ))
 			{	
 			gameArray[0][4].setIcon(xIcon);
 			gameArray[0][4].repaint();
+			undoStack.push(9);
+			errorMessage.setVisible(false);
 			//control = true;
 			playerTurn.setText("Player 2");
 			player2Panel.setBackground(Color.RED);
@@ -450,6 +506,8 @@ public class TicTacToePanel extends JPanel
 			{
 				gameArray[0][4].setIcon(oIcon);
 				gameArray[0][4].repaint();
+				undoStack.push(9);
+				errorMessage.setVisible(false);
 				playerTurn.setText("Player 1");
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
@@ -472,10 +530,16 @@ public class TicTacToePanel extends JPanel
 		}
 		else if(source == gameArray[2][0])
 		{
+			if(gameArray[2][0].getIcon() == xIcon || gameArray[2][0].getIcon() == oIcon )
+			{
+				errorMessage.setVisible(true);
+			}
 			if( (gameArray[2][0].getIcon() == open) && (playerTurn.getText().equals("Player 1") ))
 			{	
 			gameArray[2][0].setIcon(xIcon);
 			gameArray[2][0].repaint();
+			undoStack.push(4);
+			errorMessage.setVisible(false);
 			playerTurn.setText("Player 2");
 			player2Panel.setBackground(Color.RED);
 			player1Panel.setBackground(Color.white);
@@ -561,6 +625,8 @@ public class TicTacToePanel extends JPanel
 			{
 				gameArray[2][0].setIcon(oIcon);
 				gameArray[2][0].repaint();
+				undoStack.push(4);
+				errorMessage.setVisible(false);
 				playerTurn.setText("Player 1");
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
@@ -583,10 +649,16 @@ public class TicTacToePanel extends JPanel
 		}
 		else if(source == gameArray[2][2])
 		{
+			if(gameArray[2][2].getIcon() == xIcon || gameArray[2][2].getIcon() == oIcon )
+			{
+				errorMessage.setVisible(true);
+			}
 			if( (gameArray[2][2].getIcon() == open) && (playerTurn.getText().equals("Player 1") ))
 			{	
 			gameArray[2][2].setIcon(xIcon);
 			gameArray[2][2].repaint();
+			undoStack.push(5);
+			errorMessage.setVisible(false);
 			playerTurn.setText("Player 2");
 			player2Panel.setBackground(Color.RED);
 			player1Panel.setBackground(Color.white);
@@ -672,6 +744,8 @@ public class TicTacToePanel extends JPanel
 			{
 				gameArray[2][2].setIcon(oIcon);
 				gameArray[2][2].repaint();
+				undoStack.push(5);
+				errorMessage.setVisible(false);
 				playerTurn.setText("Player 1");
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
@@ -700,10 +774,16 @@ public class TicTacToePanel extends JPanel
 		}
 		else if(source == gameArray[2][4])
 		{
+			if(gameArray[2][4].getIcon() == xIcon || gameArray[2][4].getIcon() == oIcon )
+			{
+				errorMessage.setVisible(true);
+			}
 			if( (gameArray[2][4].getIcon() == open) && (playerTurn.getText().equals("Player 1") ))
 			{	
 			gameArray[2][4].setIcon(xIcon);
 			gameArray[2][4].repaint();
+			undoStack.push(6);
+			errorMessage.setVisible(false);
 			playerTurn.setText("Player 2");
 			player2Panel.setBackground(Color.RED);
 			player1Panel.setBackground(Color.white);
@@ -789,6 +869,8 @@ public class TicTacToePanel extends JPanel
 			{
 				gameArray[2][4].setIcon(oIcon);
 				gameArray[2][4].repaint();
+				undoStack.push(6);
+				errorMessage.setVisible(false);
 				playerTurn.setText("Player 1");
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
@@ -811,10 +893,16 @@ public class TicTacToePanel extends JPanel
 		}
 		else if(source == gameArray[4][0])
 		{
+			if(gameArray[4][0].getIcon() == xIcon || gameArray[4][0].getIcon() == oIcon )
+			{
+				errorMessage.setVisible(true);
+			}
 			if( (gameArray[4][0].getIcon() == open) && (playerTurn.getText().equals("Player 1") ))
 			{	
 			gameArray[4][0].setIcon(xIcon);
 			gameArray[4][0].repaint();
+			undoStack.push(1);
+			errorMessage.setVisible(false);
 			playerTurn.setText("Player 2");
 			player2Panel.setBackground(Color.RED);
 			player1Panel.setBackground(Color.white);
@@ -900,6 +988,8 @@ public class TicTacToePanel extends JPanel
 			{
 				gameArray[4][0].setIcon(oIcon);
 				gameArray[4][0].repaint();
+				undoStack.push(1);
+				errorMessage.setVisible(false);
 				playerTurn.setText("Player 1");
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
@@ -922,10 +1012,16 @@ public class TicTacToePanel extends JPanel
 		}
 		else if(source == gameArray[4][2])
 		{
+			if(gameArray[4][2].getIcon() == xIcon || gameArray[4][2].getIcon() == oIcon )
+			{
+				errorMessage.setVisible(true);
+			}
 			if( (gameArray[4][2].getIcon() == open) && (playerTurn.getText().equals("Player 1") ))
 			{	
 			gameArray[4][2].setIcon(xIcon);
 			gameArray[4][2].repaint();
+			undoStack.push(2);
+			errorMessage.setVisible(false);
 			playerTurn.setText("Player 2");
 			player2Panel.setBackground(Color.RED);
 			player1Panel.setBackground(Color.white);
@@ -1011,6 +1107,8 @@ public class TicTacToePanel extends JPanel
 			{
 				gameArray[4][2].setIcon(oIcon);
 				gameArray[4][2].repaint();
+				undoStack.push(2);
+				errorMessage.setVisible(false);
 				playerTurn.setText("Player 1");
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
@@ -1033,10 +1131,16 @@ public class TicTacToePanel extends JPanel
 		}
 		else if(source == gameArray[4][4])
 		{
+			if(gameArray[4][4].getIcon() == xIcon || gameArray[4][4].getIcon() == oIcon )
+			{
+				errorMessage.setVisible(true);
+			}
 			if( (gameArray[4][4].getIcon() == open) && (playerTurn.getText().equals("Player 1") ))
 			{	
 			gameArray[4][4].setIcon(xIcon);
 			gameArray[4][4].repaint();
+			undoStack.push(3);
+			errorMessage.setVisible(false);
 			playerTurn.setText("Player 2");
 			player2Panel.setBackground(Color.RED);
 			player1Panel.setBackground(Color.white);
@@ -1123,6 +1227,8 @@ public class TicTacToePanel extends JPanel
 			{
 				gameArray[4][4].setIcon(oIcon);
 				gameArray[4][4].repaint();
+				undoStack.push(3);
+				errorMessage.setVisible(false);
 				playerTurn.setText("Player 1");
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
@@ -1282,6 +1388,8 @@ public class TicTacToePanel extends JPanel
   	player1Panel.setBackground(Color.RED);
   	player2Panel.setBackground(Color.white);
   	playerTurn.setText("Player 1");
+  	errorMessage.setVisible(false);
+  	undoStack = new Stack<Integer>();
   	//Puts all the empty spaces to open lock sign
 	for (int i=0; i< gameArray.length;i+=2 )
 	{

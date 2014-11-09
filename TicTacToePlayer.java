@@ -227,4 +227,42 @@ public class TicTacToePlayer
 		else
 			System.out.println("That space is taken choose another one");
 	}
+
+	public void reverseSpace(int space)
+	{
+		JLabel tempArray[][] = TicTacToePanel.gameArray;
+		switch(space)
+			{
+			
+			case 1: tempArray[4][0].setIcon(TicTacToePanel.open);
+					tempArray[4][0].repaint();
+					break;
+			case 2: tempArray[4][2].setIcon(TicTacToePanel.open);
+					tempArray[4][2].repaint();
+					break;
+			case 3: tempArray[4][4].setIcon(TicTacToePanel.open);
+					tempArray[4][4].repaint();
+					break;
+			case 4: tempArray[2][0].setIcon(TicTacToePanel.open);
+					tempArray[2][0].repaint();
+					break;
+			case 5:	tempArray[2][2].setIcon(TicTacToePanel.open);
+					tempArray[2][2].repaint();
+					break;
+			case 6: tempArray[2][4].setIcon(TicTacToePanel.open);
+					tempArray[2][4].repaint();
+					break;
+			case 7:	tempArray[0][0].setIcon(TicTacToePanel.open);
+					tempArray[0][0].repaint();
+					break;
+			case 8: tempArray[0][2].setIcon(TicTacToePanel.open);
+					tempArray[0][2].repaint();
+					break;
+			case 9: tempArray[0][4].setIcon(TicTacToePanel.open);
+					tempArray[0][4].repaint();
+					break;
+			
+		}
+
+	}
 }
