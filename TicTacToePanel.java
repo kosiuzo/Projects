@@ -15,7 +15,7 @@ public class TicTacToePanel extends JPanel
 	//public JLabel label = new JLabel("TicTacToe Panel add customization as you would like ");
 	public static Stack<Integer> undoStack;
 	public static int player1Wins,player2Wins,compWins;
-	public static JLabel playerTurn, gameTitle, player1, player2, p1WinLabel, p2WinLabel,errorMessage;
+	public static JLabel playerTurn, gameTitle, player1, player2, p1WinLabel, p2WinLabel,errorMessage, whoWon;
 	public static JButton playAgain, undo;
 	public static JLabel[][] gameArray = new JLabel[5][5];
 	public static ImageIcon vertical = new ImageIcon("Images/vertical.png");
@@ -30,7 +30,7 @@ public class TicTacToePanel extends JPanel
 	//private JLabel test;
 	public TicTacToePanel()
 	{
-
+		whoWon = new JLabel("");
 		undoStack = new Stack<Integer>();
 		player1Wins=0;
 		player2Wins=0;
@@ -125,15 +125,51 @@ public class TicTacToePanel extends JPanel
 			{
 				if(!undoStack.isEmpty())
 				{
+					if(gameTitle.getText().equals("DRAW"))
+					{
+						gameTitle.setText("");
+
+					}
+					if(playAgain.isVisible())
+					{
+						playAgain.setVisible(false);
+						gameTitle.setText("");
+						if(whoWon.getText().equals("Player 1"))
+						{
+							player1Wins--;
+							p1WinLabel.setText(player1Wins + ""+ " Wins");
+						}
+						else if(whoWon.getText().equals("Player 2"))
+						{
+							player2Wins--;
+							p2WinLabel.setText(player2Wins + ""+ " Wins");
+						}
+						else if(whoWon.getText().equals("Computer"))
+						{
+							compWins--;
+							p2WinLabel.setText(compWins + ""+ " Wins");
+						}
+					}
 					System.out.println("Undo Stack Number"+undoStack.peek());
 					int space = undoStack.pop();
 					controlReverse.reverseSpace(space);
 					if(TicTacToePanel.playerTurn.getText().equals("Player 1"))
 					{
-
+					if(TicTacToePanel.player2.getText().equals("Computer"))
+					{
+						System.out.println("Testing");
+						System.out.println("Undo Stack Number"+undoStack.peek());
+						controlReverse.reverseSpace(undoStack.pop());
+						TicTacToePanel.playerTurn.setText("Player 1");
+						player2Panel.setBackground(Color.white);
+						player1Panel.setBackground(Color.RED);
+					}
+					if(TicTacToePanel.player2.getText().equals("Player 2"))
+					{
 					TicTacToePanel.playerTurn.setText("Player 2");
 					player1Panel.setBackground(Color.white);
 					player2Panel.setBackground(Color.RED);
+					}
 					}
 					else if(TicTacToePanel.playerTurn.getText().equals("Player 2"))
 					{
@@ -141,6 +177,7 @@ public class TicTacToePanel extends JPanel
 					player2Panel.setBackground(Color.white);
 					player1Panel.setBackground(Color.RED);
 					}
+
 				}
 			}
 		}
@@ -188,10 +225,11 @@ public class TicTacToePanel extends JPanel
 				p1WinLabel.setText(player1Wins + ""+ " Wins");
 				playAgain.setVisible(true);
 				gameTitle.setText("Player 1 Wins");
+				whoWon.setText("Player 1");
 
 				
 			}
-			if(checkCat())
+			else if(checkCat())
 			{
 				System.out.println("It was a cat");
 				playAgain.setVisible(true);
@@ -201,48 +239,56 @@ public class TicTacToePanel extends JPanel
 			{
 				if(comp.win(oIcon)!=0)
 				{
+					undoStack.push(comp.win(oIcon));
 					comp.insertO(comp.win(oIcon));
 					player1Panel.setBackground(Color.RED);
 					player2Panel.setBackground(Color.white);
 				}
 				else if(comp.block(xIcon)!=0)
 				{
+					undoStack.push(comp.block(xIcon));
 					comp.insertO(comp.block(xIcon));
 					player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.fork(oIcon) !=0)
 				{
+				undoStack.push(comp.fork(oIcon));
 				comp.insertO(comp.fork(oIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.blockOpponentFork(xIcon) !=0)
 				{
+				undoStack.push(comp.blockOpponentFork(xIcon));
 				comp.insertO(comp.blockOpponentFork(xIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.center() !=0)
 				{
+				undoStack.push(comp.center());
 				comp.insertO(comp.center());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.oppositeCorner(xIcon) !=0)
 										{
+				undoStack.push(comp.oppositeCorner(xIcon));
 				comp.insertO(comp.oppositeCorner(xIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.emptyCorner() !=0)
 										{
+				undoStack.push(comp.emptyCorner());
 				comp.insertO(comp.emptyCorner());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.emptySide() !=0)
 										{
+				undoStack.push(comp.emptySide());
 				comp.insertO(comp.emptySide());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
@@ -251,11 +297,12 @@ public class TicTacToePanel extends JPanel
 				{
 					System.out.println("Computer Won");
 					gameTitle.setText("Computer Wins");
+					whoWon.setText("Computer");
 					compWins++;
 					p2WinLabel.setText(compWins + "" + " Wins");
 					playAgain.setVisible(true);
 				}
-				if(checkCat())
+				else if(checkCat())
 				{
 					gameTitle.setText("DRAW");
 				}
@@ -277,8 +324,10 @@ public class TicTacToePanel extends JPanel
 				p2WinLabel.setText(player2Wins + ""+ " Wins");
 				playAgain.setVisible(true);
 				gameTitle.setText("Player 2 Wins");
+				whoWon.setText("Player 2")
+				;
 				}
-				if(checkCat())
+				else if(checkCat())
 				{
 				System.out.println("It was a cat");
 				playAgain.setVisible(true);
@@ -310,9 +359,10 @@ public class TicTacToePanel extends JPanel
 				p1WinLabel.setText(player1Wins + ""+ " Wins");
 				playAgain.setVisible(true);
 				gameTitle.setText("Player 1 Wins");
+				whoWon.setText("Player 1");
 				
 			}
-			if(checkCat())
+			else if(checkCat())
 			{
 				System.out.println("It was a cat");
 				playAgain.setVisible(true);
@@ -322,48 +372,56 @@ public class TicTacToePanel extends JPanel
 			{
 				if(comp.win(oIcon)!=0)
 				{
+					undoStack.push(comp.win(oIcon));
 					comp.insertO(comp.win(oIcon));
 					player1Panel.setBackground(Color.RED);
 					player2Panel.setBackground(Color.white);
 				}
 				else if(comp.block(xIcon)!=0)
 				{
+					undoStack.push(comp.block(xIcon));
 					comp.insertO(comp.block(xIcon));
 					player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.fork(oIcon) !=0)
 				{
+				undoStack.push(comp.fork(oIcon));
 				comp.insertO(comp.fork(oIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.blockOpponentFork(xIcon) !=0)
 				{
+				undoStack.push(comp.blockOpponentFork(xIcon));
 				comp.insertO(comp.blockOpponentFork(xIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.center() !=0)
 				{
+				undoStack.push(comp.center());
 				comp.insertO(comp.center());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.oppositeCorner(xIcon) !=0)
 										{
+				undoStack.push(comp.oppositeCorner(xIcon));
 				comp.insertO(comp.oppositeCorner(xIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.emptyCorner() !=0)
 										{
+				undoStack.push(comp.emptyCorner());
 				comp.insertO(comp.emptyCorner());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.emptySide() !=0)
 										{
+				undoStack.push(comp.emptySide());
 				comp.insertO(comp.emptySide());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
@@ -372,11 +430,12 @@ public class TicTacToePanel extends JPanel
 				{
 					System.out.println("Computer Won");
 					gameTitle.setText("Computer Wins");
+					whoWon.setText("Computer");
 					compWins++;
 					p2WinLabel.setText(compWins + "" + " Wins");
 					playAgain.setVisible(true);
 				}
-				if(checkCat())
+				else if(checkCat())
 				{
 					gameTitle.setText("DRAW");
 				}
@@ -399,8 +458,10 @@ public class TicTacToePanel extends JPanel
 				playAgain.setVisible(true);
 				
 				gameTitle.setText("Player 2 Wins");
+				whoWon.setText("Player 2")
+				;
 				}
-				if(checkCat())
+				else if(checkCat())
 				{
 				System.out.println("It was a cat");
 				playAgain.setVisible(true);
@@ -431,8 +492,9 @@ public class TicTacToePanel extends JPanel
 				p1WinLabel.setText(player1Wins + ""+ " Wins");
 				playAgain.setVisible(true);
 				gameTitle.setText("Player 1 Wins");
+				whoWon.setText("Player 1");
 			}
-			if(checkCat())
+			else if(checkCat())
 			{
 				System.out.println("It was a cat");
 				playAgain.setVisible(true);
@@ -442,48 +504,56 @@ public class TicTacToePanel extends JPanel
 			{
 				if(comp.win(oIcon)!=0)
 				{
+					undoStack.push(comp.win(oIcon));
 					comp.insertO(comp.win(oIcon));
 					player1Panel.setBackground(Color.RED);
 					player2Panel.setBackground(Color.white);
 				}
 				else if(comp.block(xIcon)!=0)
 				{
+					undoStack.push(comp.block(xIcon));
 					comp.insertO(comp.block(xIcon));
 					player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.fork(oIcon) !=0)
 				{
+				undoStack.push(comp.fork(oIcon));
 				comp.insertO(comp.fork(oIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.blockOpponentFork(xIcon) !=0)
 				{
+				undoStack.push(comp.blockOpponentFork(xIcon));
 				comp.insertO(comp.blockOpponentFork(xIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.center() !=0)
 				{
+				undoStack.push(comp.center());
 				comp.insertO(comp.center());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.oppositeCorner(xIcon) !=0)
 										{
+				undoStack.push(comp.oppositeCorner(xIcon));
 				comp.insertO(comp.oppositeCorner(xIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.emptyCorner() !=0)
 										{
+				undoStack.push(comp.emptyCorner());
 				comp.insertO(comp.emptyCorner());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.emptySide() !=0)
 										{
+				undoStack.push(comp.emptySide());
 				comp.insertO(comp.emptySide());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
@@ -492,11 +562,12 @@ public class TicTacToePanel extends JPanel
 				{
 					System.out.println("Computer Won");
 					gameTitle.setText("Computer Wins");
+					whoWon.setText("Computer");
 					compWins++;
 					p2WinLabel.setText(compWins + "" + " Wins");
 					playAgain.setVisible(true);
 				}
-				if(checkCat())
+				else if(checkCat())
 				{
 					gameTitle.setText("DRAW");
 				}
@@ -519,8 +590,10 @@ public class TicTacToePanel extends JPanel
 				playAgain.setVisible(true);
 				
 				gameTitle.setText("Player 2 Wins");
+				whoWon.setText("Player 2")
+				;
 				}
-				if(checkCat())
+				else if(checkCat())
 				{
 				System.out.println("It was a cat");
 				playAgain.setVisible(true);
@@ -550,8 +623,9 @@ public class TicTacToePanel extends JPanel
 				p1WinLabel.setText(player1Wins + ""+ " Wins");
 				playAgain.setVisible(true);
 				gameTitle.setText("Player 1 Wins");
+				whoWon.setText("Player 1");
 			}
-			if(checkCat())
+			else if(checkCat())
 			{
 				System.out.println("It was a cat");
 				playAgain.setVisible(true);
@@ -561,48 +635,56 @@ public class TicTacToePanel extends JPanel
 			{
 				if(comp.win(oIcon)!=0)
 				{
+					undoStack.push(comp.win(oIcon));
 					comp.insertO(comp.win(oIcon));
 					player1Panel.setBackground(Color.RED);
 					player2Panel.setBackground(Color.white);
 				}
 				else if(comp.block(xIcon)!=0)
 				{
+					undoStack.push(comp.block(xIcon));
 					comp.insertO(comp.block(xIcon));
 					player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.fork(oIcon) !=0)
 				{
+				undoStack.push(comp.fork(oIcon));
 				comp.insertO(comp.fork(oIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.blockOpponentFork(xIcon) !=0)
 				{
+				undoStack.push(comp.blockOpponentFork(xIcon));
 				comp.insertO(comp.blockOpponentFork(xIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.center() !=0)
 				{
+				undoStack.push(comp.center());
 				comp.insertO(comp.center());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.oppositeCorner(xIcon) !=0)
 										{
+				undoStack.push(comp.oppositeCorner(xIcon));
 				comp.insertO(comp.oppositeCorner(xIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.emptyCorner() !=0)
 										{
+				undoStack.push(comp.emptyCorner());
 				comp.insertO(comp.emptyCorner());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.emptySide() !=0)
 										{
+				undoStack.push(comp.emptySide());
 				comp.insertO(comp.emptySide());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
@@ -611,11 +693,12 @@ public class TicTacToePanel extends JPanel
 				{
 					System.out.println("Computer Won");
 					gameTitle.setText("Computer Wins");
+					whoWon.setText("Computer");
 					compWins++;
 					p2WinLabel.setText(compWins + "" + " Wins");
 					playAgain.setVisible(true);
 				}
-				if(checkCat())
+				else if(checkCat())
 				{
 					gameTitle.setText("DRAW");
 				}
@@ -638,8 +721,10 @@ public class TicTacToePanel extends JPanel
 				playAgain.setVisible(true);
 				
 				gameTitle.setText("Player 2 Wins");
+				whoWon.setText("Player 2")
+				;
 				}
-				if(checkCat())
+				else if(checkCat())
 				{
 				System.out.println("It was a cat");
 				playAgain.setVisible(true);
@@ -669,8 +754,9 @@ public class TicTacToePanel extends JPanel
 				p1WinLabel.setText(player1Wins + ""+ " Wins");
 				playAgain.setVisible(true);
 				gameTitle.setText("Player 1 Wins");
+				whoWon.setText("Player 1");
 			}
-			if(checkCat())
+			else if(checkCat())
 			{
 				System.out.println("It was a cat");
 				playAgain.setVisible(true);
@@ -680,48 +766,56 @@ public class TicTacToePanel extends JPanel
 			{
 				if(comp.win(oIcon)!=0)
 				{
+					undoStack.push(comp.win(oIcon));
 					comp.insertO(comp.win(oIcon));
 					player1Panel.setBackground(Color.RED);
 					player2Panel.setBackground(Color.white);
 				}
 				else if(comp.block(xIcon)!=0)
 				{
+					undoStack.push(comp.block(xIcon));
 					comp.insertO(comp.block(xIcon));
 					player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.fork(oIcon) !=0)
 				{
+				undoStack.push(comp.fork(oIcon));
 				comp.insertO(comp.fork(oIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.blockOpponentFork(xIcon) !=0)
 				{
+				undoStack.push(comp.blockOpponentFork(xIcon));
 				comp.insertO(comp.blockOpponentFork(xIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.center() !=0)
 				{
+				undoStack.push(comp.center());
 				comp.insertO(comp.center());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.oppositeCorner(xIcon) !=0)
 										{
+				undoStack.push(comp.oppositeCorner(xIcon));
 				comp.insertO(comp.oppositeCorner(xIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.emptyCorner() !=0)
 										{
+				undoStack.push(comp.emptyCorner());
 				comp.insertO(comp.emptyCorner());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.emptySide() !=0)
 										{
+				undoStack.push(comp.emptySide());
 				comp.insertO(comp.emptySide());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
@@ -730,11 +824,12 @@ public class TicTacToePanel extends JPanel
 				{
 					System.out.println("Computer Won");
 					gameTitle.setText("Computer Wins");
+					whoWon.setText("Computer");
 					compWins++;
 					p2WinLabel.setText(compWins + "" + " Wins");
 					playAgain.setVisible(true);
 				}
-				if(checkCat())
+				else if(checkCat())
 				{
 					gameTitle.setText("DRAW");
 				}
@@ -757,8 +852,10 @@ public class TicTacToePanel extends JPanel
 				playAgain.setVisible(true);
 				
 				gameTitle.setText("Player 2 Wins");
+				whoWon.setText("Player 2")
+				;
 				}
-				if(checkCat())
+				else if(checkCat())
 				{
 				System.out.println("It was a cat");
 				playAgain.setVisible(true);
@@ -794,8 +891,9 @@ public class TicTacToePanel extends JPanel
 				p1WinLabel.setText(player1Wins + ""+ " Wins");
 				playAgain.setVisible(true);
 				gameTitle.setText("Player 1 Wins");
+				whoWon.setText("Player 1");
 			}
-			if(checkCat())
+			else if(checkCat())
 			{
 				System.out.println("It was a cat");
 				playAgain.setVisible(true);
@@ -805,48 +903,56 @@ public class TicTacToePanel extends JPanel
 			{
 				if(comp.win(oIcon)!=0)
 				{
+					undoStack.push(comp.win(oIcon));
 					comp.insertO(comp.win(oIcon));
 					player1Panel.setBackground(Color.RED);
 					player2Panel.setBackground(Color.white);
 				}
 				else if(comp.block(xIcon)!=0)
 				{
+					undoStack.push(comp.block(xIcon));
 					comp.insertO(comp.block(xIcon));
 					player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.fork(oIcon) !=0)
 				{
+				undoStack.push(comp.fork(oIcon));
 				comp.insertO(comp.fork(oIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.blockOpponentFork(xIcon) !=0)
 				{
+				undoStack.push(comp.blockOpponentFork(xIcon));
 				comp.insertO(comp.blockOpponentFork(xIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.center() !=0)
 				{
+				undoStack.push(comp.center());
 				comp.insertO(comp.center());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.oppositeCorner(xIcon) !=0)
 										{
+				undoStack.push(comp.oppositeCorner(xIcon));
 				comp.insertO(comp.oppositeCorner(xIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.emptyCorner() !=0)
 										{
+				undoStack.push(comp.emptyCorner());
 				comp.insertO(comp.emptyCorner());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.emptySide() !=0)
 										{
+				undoStack.push(comp.emptySide());
 				comp.insertO(comp.emptySide());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
@@ -855,11 +961,12 @@ public class TicTacToePanel extends JPanel
 				{
 					System.out.println("Computer Won");
 					gameTitle.setText("Computer Wins");
+					whoWon.setText("Computer");
 					compWins++;
 					p2WinLabel.setText(compWins + "" + " Wins");
 					playAgain.setVisible(true);
 				}
-				if(checkCat())
+				else if(checkCat())
 				{
 					gameTitle.setText("DRAW");
 				}
@@ -882,8 +989,10 @@ public class TicTacToePanel extends JPanel
 				playAgain.setVisible(true);
 				
 				gameTitle.setText("Player 2 Wins");
+				whoWon.setText("Player 2")
+				;
 				}
-				if(checkCat())
+				else if(checkCat())
 				{
 				System.out.println("It was a cat");
 				playAgain.setVisible(true);
@@ -913,8 +1022,9 @@ public class TicTacToePanel extends JPanel
 				p1WinLabel.setText(player1Wins + ""+ " Wins");
 				playAgain.setVisible(true);
 				gameTitle.setText("Player 1 Wins");
+				whoWon.setText("Player 1");
 			}
-			if(checkCat())
+			else if(checkCat())
 			{
 				System.out.println("It was a cat");
 				playAgain.setVisible(true);
@@ -924,48 +1034,56 @@ public class TicTacToePanel extends JPanel
 			{
 				if(comp.win(oIcon)!=0)
 				{
+					undoStack.push(comp.win(oIcon));
 					comp.insertO(comp.win(oIcon));
 					player1Panel.setBackground(Color.RED);
 					player2Panel.setBackground(Color.white);
 				}
 				else if(comp.block(xIcon)!=0)
 				{
+					undoStack.push(comp.block(xIcon));
 					comp.insertO(comp.block(xIcon));
 					player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.fork(oIcon) !=0)
 				{
+				undoStack.push(comp.fork(oIcon));
 				comp.insertO(comp.fork(oIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.blockOpponentFork(xIcon) !=0)
 				{
+				undoStack.push(comp.blockOpponentFork(xIcon));
 				comp.insertO(comp.blockOpponentFork(xIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.center() !=0)
 				{
+				undoStack.push(comp.center());
 				comp.insertO(comp.center());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.oppositeCorner(xIcon) !=0)
 										{
+				undoStack.push(comp.oppositeCorner(xIcon));
 				comp.insertO(comp.oppositeCorner(xIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.emptyCorner() !=0)
 										{
+				undoStack.push(comp.emptyCorner());
 				comp.insertO(comp.emptyCorner());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.emptySide() !=0)
 										{
+				undoStack.push(comp.emptySide());
 				comp.insertO(comp.emptySide());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
@@ -974,11 +1092,12 @@ public class TicTacToePanel extends JPanel
 				{
 					System.out.println("Computer Won");
 					gameTitle.setText("Computer Wins");
+					whoWon.setText("Computer");
 					compWins++;
 					p2WinLabel.setText(compWins + "" + " Wins");
 					playAgain.setVisible(true);
 				}
-				if(checkCat())
+				else if(checkCat())
 				{
 					gameTitle.setText("DRAW");
 				}
@@ -1001,8 +1120,10 @@ public class TicTacToePanel extends JPanel
 				playAgain.setVisible(true);
 				
 				gameTitle.setText("Player 2 Wins");
+				whoWon.setText("Player 2")
+				;
 				}
-				if(checkCat())
+				else if(checkCat())
 				{
 				System.out.println("It was a cat");
 				playAgain.setVisible(true);
@@ -1032,8 +1153,9 @@ public class TicTacToePanel extends JPanel
 				p1WinLabel.setText(player1Wins + ""+ " Wins");
 				playAgain.setVisible(true);
 				gameTitle.setText("Player 1 Wins");
+				whoWon.setText("Player 1");
 			}
-			if(checkCat())
+			else if(checkCat())
 			{
 				System.out.println("It was a cat");
 				playAgain.setVisible(true);
@@ -1043,48 +1165,56 @@ public class TicTacToePanel extends JPanel
 			{
 				if(comp.win(oIcon)!=0)
 				{
+					undoStack.push(comp.win(oIcon));
 					comp.insertO(comp.win(oIcon));
 					player1Panel.setBackground(Color.RED);
 					player2Panel.setBackground(Color.white);
 				}
 				else if(comp.block(xIcon)!=0)
 				{
+					undoStack.push(comp.block(xIcon));
 					comp.insertO(comp.block(xIcon));
 					player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.fork(oIcon) !=0)
 				{
+				undoStack.push(comp.fork(oIcon));
 				comp.insertO(comp.fork(oIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.blockOpponentFork(xIcon) !=0)
 				{
+				undoStack.push(comp.blockOpponentFork(xIcon));
 				comp.insertO(comp.blockOpponentFork(xIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.center() !=0)
 				{
+				undoStack.push(comp.center());
 				comp.insertO(comp.center());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.oppositeCorner(xIcon) !=0)
 										{
+				undoStack.push(comp.oppositeCorner(xIcon));
 				comp.insertO(comp.oppositeCorner(xIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.emptyCorner() !=0)
 										{
+				undoStack.push(comp.emptyCorner());
 				comp.insertO(comp.emptyCorner());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.emptySide() !=0)
 										{
+				undoStack.push(comp.emptySide());
 				comp.insertO(comp.emptySide());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
@@ -1093,11 +1223,12 @@ public class TicTacToePanel extends JPanel
 				{
 					System.out.println("Computer Won");
 					gameTitle.setText("Computer Wins");
+					whoWon.setText("Computer");
 					compWins++;
 					p2WinLabel.setText(compWins + "" + " Wins");
 					playAgain.setVisible(true);
 				}
-				if(checkCat())
+				else if(checkCat())
 				{
 					gameTitle.setText("DRAW");
 				}
@@ -1120,8 +1251,10 @@ public class TicTacToePanel extends JPanel
 				playAgain.setVisible(true);
 				
 				gameTitle.setText("Player 2 Wins");
+				whoWon.setText("Player 2")
+				;
 				}
-				if(checkCat())
+				else if(checkCat())
 				{
 				System.out.println("It was a cat");
 				playAgain.setVisible(true);
@@ -1151,8 +1284,9 @@ public class TicTacToePanel extends JPanel
 				p1WinLabel.setText(player1Wins + ""+ " Wins");
 				playAgain.setVisible(true);
 				gameTitle.setText("Player 1 Wins");
+				whoWon.setText("Player 1");
 			}
-			if(checkCat())
+			else if(checkCat())
 			{
 				System.out.println("It was a cat");
 				playAgain.setVisible(true);
@@ -1162,48 +1296,56 @@ public class TicTacToePanel extends JPanel
 			{
 				if(comp.win(oIcon)!=0)
 				{
+					undoStack.push(comp.win(oIcon));
 					comp.insertO(comp.win(oIcon));
 					player1Panel.setBackground(Color.RED);
 					player2Panel.setBackground(Color.white);
 				}
 				else if(comp.block(xIcon)!=0)
 				{
+					undoStack.push(comp.block(xIcon));
 					comp.insertO(comp.block(xIcon));
 					player1Panel.setBackground(Color.RED);
 					player2Panel.setBackground(Color.white);
 				}
 				else if(comp.fork(oIcon) !=0)
 				{
+				undoStack.push(comp.fork(oIcon));
 				comp.insertO(comp.fork(oIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.blockOpponentFork(xIcon) !=0)
 				{
+				undoStack.push(comp.blockOpponentFork(xIcon));
 				comp.insertO(comp.blockOpponentFork(xIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.center() !=0)
 				{
+				undoStack.push(comp.center());
 				comp.insertO(comp.center());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.oppositeCorner(xIcon) !=0)
 										{
+				undoStack.push(comp.oppositeCorner(xIcon));
 				comp.insertO(comp.oppositeCorner(xIcon));
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.emptyCorner() !=0)
 										{
+				undoStack.push(comp.emptyCorner());
 				comp.insertO(comp.emptyCorner());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
 				}
 				else if(comp.emptySide() !=0)
 										{
+				undoStack.push(comp.emptySide());
 				comp.insertO(comp.emptySide());
 				player1Panel.setBackground(Color.RED);
 				player2Panel.setBackground(Color.white);
@@ -1212,11 +1354,12 @@ public class TicTacToePanel extends JPanel
 				{
 					System.out.println("Computer Won");
 					gameTitle.setText("Computer Wins");
+					whoWon.setText("Computer");
 					compWins++;
 					p2WinLabel.setText(compWins + "" + " Wins");
 					playAgain.setVisible(true);
 				}
-				if(checkCat())
+				else if(checkCat())
 				{
 					gameTitle.setText("DRAW");
 				}
@@ -1240,8 +1383,9 @@ public class TicTacToePanel extends JPanel
 				playAgain.setVisible(true);
 				
 				gameTitle.setText("Player 2 Wins");
+				whoWon.setText("Player 2");
 				}
-				if(checkCat())
+				else if(checkCat())
 				{
 				System.out.println("It was a cat");
 				playAgain.setVisible(true);
@@ -1389,6 +1533,7 @@ public class TicTacToePanel extends JPanel
   	player2Panel.setBackground(Color.white);
   	playerTurn.setText("Player 1");
   	errorMessage.setVisible(false);
+  	whoWon.setText("");
   	undoStack = new Stack<Integer>();
   	//Puts all the empty spaces to open lock sign
 	for (int i=0; i< gameArray.length;i+=2 )
