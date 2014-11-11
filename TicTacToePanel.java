@@ -97,12 +97,11 @@ public class TicTacToePanel extends JPanel
 		undo.setFont(font);
 		undo.setMnemonic(KeyEvent.VK_Z);
 		undo.addActionListener(new BListener());
-<<<<<<< HEAD
+
 		undo.setAlignmentX(Component.CENTER_ALIGNMENT);
-=======
+
 		undo.setMnemonic(KeyEvent.VK_U);
 
->>>>>>> c325ee4e9242910f8f764a4af5d8c29edb000959
 
 		//Adding to the titlePanel
 		titlePanel.add(player1Panel);
