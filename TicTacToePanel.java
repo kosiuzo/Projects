@@ -30,22 +30,27 @@ public class TicTacToePanel extends JPanel
 	//private JLabel test;
 	public TicTacToePanel()
 	{
-		whoWon = new JLabel("");
+	 
+	    setBackground(Color.BLACK);
+	    whoWon = new JLabel("");
 		undoStack = new Stack<Integer>();
 		player1Wins=0;
 		player2Wins=0;
 		compWins=0;
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		titlePanel = new JPanel();
-		titlePanel.setPreferredSize(new Dimension(300,400));
+		titlePanel.setBackground(Color.BLACK);
+		//titlePanel.setPreferredSize(new Dimension(300,400));
 		titlePanel.setLayout(new BoxLayout(titlePanel,BoxLayout.X_AXIS));
-		Font font = new Font("Jokerman", Font.PLAIN, 35);
+		Font font = new Font("FixedSys", Font.PLAIN, 30);
 		
 		//Error Message to display
 		errorMessage = new JLabel("Choose another Space");
 		errorMessage.setFont(font);
+		errorMessage.setForeground(Color.RED);
 		errorMessage.setVisible(false);
-
+		errorMessage.setAlignmentX(Component.CENTER_ALIGNMENT);
+		
 		//Setting Player 1
 		player1 = new JLabel("Player 1");
 		p1WinLabel = new JLabel(player1Wins + ""+ " Wins");
@@ -63,13 +68,17 @@ public class TicTacToePanel extends JPanel
 		playAgain.setVisible(false);
 		playAgain.setFont(font);
 		playAgain.addActionListener(new BListener());
+		playAgain.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		//Setting Game Title
 		gameTitle = new JLabel("");
 		gameTitle.setFont(font);
+		gameTitle.setForeground(Color.YELLOW);
 		gameTitlePanel = new JPanel();
-		gameTitlePanel.setPreferredSize(new Dimension(50,50));
+		gameTitlePanel.setBackground(Color.BLACK);
+		//gameTitlePanel.setPreferredSize(new Dimension(50,50));
 		gameTitlePanel.add(gameTitle);
+		gameTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 		
 		//Setting Player 2
 		player2 = new JLabel("Player 2");
@@ -81,35 +90,41 @@ public class TicTacToePanel extends JPanel
 		player2Panel.setLayout(new BoxLayout(player2Panel, BoxLayout.Y_AXIS));
 		player2Panel.add(player2);
 		player2Panel.add(p2WinLabel);
+		player2Panel.setBackground(Color.WHITE);
 
 		//Setting up undo button
 		undo = new JButton("UNDO");
 		undo.setFont(font);
+		undo.setMnemonic(KeyEvent.VK_Z);
 		undo.addActionListener(new BListener());
-
+		undo.setAlignmentX(Component.CENTER_ALIGNMENT);
 
 		//Adding to the titlePanel
 		titlePanel.add(player1Panel);
-		//titlePanel.add(Box.createRigidArea(new Dimension(0,15)));
 		titlePanel.add(gameTitlePanel);
-		titlePanel.add(playAgain);
-		titlePanel.add(Box.createRigidArea(new Dimension(0,15)));
+		//titlePanel.add(playAgain);
+//		//titlePanel.add(Box.createRigidArea(new Dimension(0,15)));
 		titlePanel.add(player2Panel);
 		
 		//Making the board and adding all panels associated with it
 		makeBoard();
+		
 		//Adding all the panels 
 		add(titlePanel);
-		add(Box.createRigidArea(new Dimension(0,15)));
+//		//add(Box.createRigidArea(new Dimension(0,15)));
 		add(gameTitle);
 		gameBoard.add(innerBoard1);
 		gameBoard.add(innerBoard2);
 		gameBoard.add(innerBoard3);
 		gameBoard.add(innerBoard4);
 		gameBoard.add(innerBoard5);
+		gameBoard.setBackground(Color.BLACK);
+		
+		add(playAgain);
 		add(gameBoard);
 		add(errorMessage);
 		add(undo);
+		
 		comp = new CutThroatComputerPlayer();
 		
 	}
