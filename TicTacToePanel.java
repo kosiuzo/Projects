@@ -86,6 +86,7 @@ public class TicTacToePanel extends JPanel
 		undo = new JButton("UNDO");
 		undo.setFont(font);
 		undo.addActionListener(new BListener());
+		undo.setMnemonic(KeyEvent.VK_U);
 
 
 		//Adding to the titlePanel

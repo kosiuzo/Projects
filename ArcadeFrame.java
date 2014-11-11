@@ -14,7 +14,7 @@ public class ArcadeFrame {
 	public static JMenuBar menu;
 	public static JMenu game, help;
 	public static JFrame frame;
-    
+
     public ArcadeFrame () {
 	frame = new JFrame("Arcade");
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -22,11 +22,11 @@ public class ArcadeFrame {
 
 	menuLister listener = new menuLister();
 
-	 menu = new JMenuBar();
+	menu = new JMenuBar();
 	frame.setJMenuBar(menu);
-	 game = new JMenu("Game");
+	game = new JMenu("Game");
 	game.setMnemonic(KeyEvent.VK_G);
-	 help = new JMenu("Help");
+	help = new JMenu("Help");
 	help.setMnemonic(KeyEvent.VK_H);
 	menu.add(game);
 	menu.add(help);
@@ -46,10 +46,10 @@ public class ArcadeFrame {
 	game.add(quit);
 	help.add(gs);
 	help.add(about);
-	
+
 	//set up main menu pane
 	ArcadeGUI MMPanel = new ArcadeGUI();
-	
+
 	frame.setContentPane(MMPanel);
 
 	frame.validate();
@@ -78,14 +78,14 @@ public class ArcadeFrame {
 	    }
 	    else if(source == gs)
 	    {
-	    	JOptionPane.showMessageDialog(null, "To start pick one of choices to play the game of your choice" + 
+	    	JOptionPane.showMessageDialog(null, "To start pick one of choices to play the game of your choice" +
 					"\n\nMENUBAR OPTIONS\nMainMenu: Takes you back to the main menu to choose a selection to play \nQuit: Exits the program" +
-					 "\nGetStarted: Tells you information on how to use the program\n" + 
+					 "\nGetStarted: Tells you information on how to use the program\n" +
 					 "About Options: tells you about the program", "Getting Started", JOptionPane.INFORMATION_MESSAGE);
 	    }
 	}
     }
 
-   
-    
+
+
 }
