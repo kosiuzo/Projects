@@ -3,6 +3,8 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -10,16 +12,19 @@ import java.awt.event.*;
 import java.awt.*;
 
 public class ArcadeFrame {
-	public static JMenuItem quit, gs,about,mm;
-	public static JMenuBar menu;
-	public static JMenu game, help;
-	public static JFrame frame;
+    public static JMenuItem quit, gs,about,mm;
+    public static JMenuBar menu;
+    public static JMenu game, help;
+    public static JFrame frame;
+  
     
     public ArcadeFrame () {
 	frame = new JFrame("Arcade");
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	frame.setPreferredSize(new Dimension(800,700));
-
+	frame.setPreferredSize(new Dimension(600,600));
+	
+	
+	
 	menuLister listener = new menuLister();
 
 	 menu = new JMenuBar();
