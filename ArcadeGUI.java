@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.imageio.ImageIO;
+import java.net.URL;
 import javax.swing.BoxLayout;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -11,27 +12,35 @@ import java.awt.event.*;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.JFrame;
+import java.io.File;
+import java.io.IOException;
+import java.awt.Graphics;
 
 public class ArcadeGUI extends JPanel {
 
-    public static JLabel ticTacLabel, blackJackLabel;
-    public static ImageIcon ticTacToeImage = new ImageIcon("Images/tictactoe.png");
-    public static ImageIcon blackJackImage = new ImageIcon("Images/blackjack.png");
-
-
+    public static JLabel ticTacLabel, blackJackLabel, titleLabel;
+    public static ImageIcon ticTacToeImage = new ImageIcon("Images/tttbutton.png");
+    public static ImageIcon blackJackImage = new ImageIcon("Images/bjbutton.png");
+    public static ImageIcon title = new ImageIcon("Images/titlelabel.png");
+    
     public ArcadeGUI () {
-    MListener listener = new MListener();
-    ticTacLabel=new JLabel(ticTacToeImage);
-    blackJackLabel = new JLabel(blackJackImage);
-    ticTacLabel.addMouseListener(listener);
-    blackJackLabel.addMouseListener(listener);
-    ticTacLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-    blackJackLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
-    add(ticTacLabel);
-    add(blackJackLabel);
+    
+	
+	MListener listener = new MListener();  
+	titleLabel = new JLabel(title);
+	ticTacLabel = new JLabel(ticTacToeImage);
+	blackJackLabel = new JLabel(blackJackImage);
+	ticTacLabel.addMouseListener(listener);
+	blackJackLabel.addMouseListener(listener);
+	ticTacLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+	blackJackLabel.setAlignmentX(Component.CENTER_ALIGNMENT);   
+	titleLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+	add(titleLabel);
+	add(ticTacLabel);
+	add(blackJackLabel);
 	setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-
-
+	setBackground(Color.BLACK);
+    
     }
 
  	public static class MListener implements MouseListener
@@ -51,7 +60,7 @@ public class ArcadeGUI extends JPanel {
 		}
 		else if(source == blackJackLabel)
 		{
-			BlackJackPanel panel = new BlackJackPanel();
+			blackJackPanel panel = new blackJackPanel();
 			ArcadeFrame.frame.setContentPane(panel);
 			ArcadeFrame.frame.validate();
 			ArcadeFrame.frame.repaint();
