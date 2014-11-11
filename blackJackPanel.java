@@ -1,22 +1,33 @@
 import javax.swing.*;
 
+import java.util.Scanner;
 import java.awt.event.*;
 import java.awt.*;
 import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
 public class blackJackPanel extends JPanel 
 {
 public JButton split, stand, hit, history, playAgain;
 public static JPanel buttonPanel, computerPanel, userPanel;
 public static JLabel winnerTitle, whoWon, playerTurn;
-public static int compHand, userHand, splitHand, shoeValue, wins, losses;
+public static int compHand, userHand, splitHand, shoeValue, wins, losses, games;
 public static Card gameDeck;
 public SingleCard firstCardUser,secondCardUser, firstCardComp, secondCardComp;
 public ImageIcon hide = new ImageIcon("classic-cards/b1fv.png");
 public JLabel hideCard = new JLabel(hide);
-
+public String userStr,compStr, userCards, compCards;
+public GameLogging log = new GameLogging();
+public Scanner inputStream;
+private final static String newline = "\n";
 
 public blackJackPanel()
 {
+	//logging information
+	log.eraseFile("gameplay.txt");
+	log.openFile("gameplay.txt");
+	compStr=userStr=userCards=compCards="";
+	
 	//Setting button Panel
 	buttonPanel = new JPanel();
 	
@@ -25,7 +36,7 @@ public blackJackPanel()
 	setBackground(Color.BLACK);
 	
 	//Setting all the beginning values to zero
-	wins=losses=compHand=userHand=splitHand=0;
+	games=wins=losses=compHand=userHand=splitHand=0;
 	
 	//Setting the turn
 	playerTurn = new JLabel("User");
@@ -107,9 +118,17 @@ public blackJackPanel()
 	//Adding button Panel
 	add(buttonPanel);
 	
-	//Printing out value of the hands
+	//Printing out value of the hands and names of Card
+	userStr = new String("First: "+ firstCardUser.name + "\tSecond: " + secondCardUser.name);
+	compStr = new String("First: "+ firstCardComp.name + "\tSecond: " + secondCardComp.name);
+	System.out.println("User's Hand: \t\t" + userStr);
+	System.out.println("Computer's Hand: \t" + compStr);
 	System.out.println("Users Hand "+ userHand);
 	System.out.println("Computers Hand "+ compHand);
+	
+	//Variables for logging
+	userCards+= "User Cards: " +  firstCardUser.name + ", " + secondCardUser.name;
+	compCards+= "Computer Cards: " +  firstCardComp.name + ", " + secondCardComp.name;
 	
 
 
@@ -133,34 +152,60 @@ public class ButtonListener implements ActionListener
 				SingleCard temp = gameDeck.getNextCard();
 				userPanel.add(temp);
 				userHand +=temp.value;
+				userCards += ", " + temp.name;
 				userPanel.add(space);
 				userPanel.add(secondCardUser);
 				SingleCard temp2 = gameDeck.getNextCard();
 				userPanel.add(temp2);
 				splitHand +=temp2.value;
+				userCards += ", " + temp2.name;
 				userPanel.validate();
 				userPanel.repaint();
 				validate();
 				repaint();
 				if(userHand<compHand && splitHand<compHand)
 				{
-					winnerTitle.setText("YOU LOSE BOTH HANDS");
+					winnerTitle.setText("YOU LOST BOTH HANDS");
+					System.out.println("Users Hand "+ userHand);
+					System.out.println("Computers Hand "+ compHand);
 					losses++;
+					games++;
+					String logger = new String("Game " + games + "\n" + userCards + "\n" + compCards + "\n" + winnerTitle.getText()+"\n");
+					log.record(logger);
+					log.saveFile();
 				}
 				else if(userHand>compHand && splitHand>compHand)
 				{
 					winnerTitle.setText("YOU WON BOTH HANDS");
+					System.out.println("Users Hand "+ userHand);
+					System.out.println("Computers Hand "+ compHand);
 					wins++;
+					games++;
+					String logger = new String("Game " + games + "\n" + userCards + "\n" + compCards + "\n" + winnerTitle.getText()+"\n");
+					log.record(logger);
+					log.saveFile();
 				}
 				else if(userHand>compHand)
 				{
 					winnerTitle.setText("YOUR FIRST HAND WON");
+					System.out.println("Users Hand "+ userHand);
+					System.out.println("Computers Hand "+ compHand);
 					wins++;
+					games++;
+					String logger = new String("Game " + games + "\n" + userCards + "\n" + compCards + "\n" + winnerTitle.getText()+"\n");
+					log.record(logger);
+					log.saveFile();
 				}
 				else if(splitHand>compHand)
 				{
 					winnerTitle.setText("YOUR SECOND HAND WON");
+					System.out.println("Users Hand "+ userHand);
+					System.out.println("Computers Hand "+ compHand);
 					wins++;
+					games++;
+					String logger = new String("Game " + games + "\n" + userCards + "\n" + compCards + "\n" + winnerTitle.getText()+"\n");
+					log.record(logger);
+					log.saveFile();
 				}
 				hideCard.setVisible(false);
 				secondCardComp.setVisible(true);
@@ -176,25 +221,59 @@ public class ButtonListener implements ActionListener
 			{
 				SingleCard temp = gameDeck.getNextCard();
 				compHand +=temp.value;
+				compCards += ", " + temp.name;
 				computerPanel.add(temp);
 				validate();
 				repaint();
+				System.out.println("Users Hand "+ userHand);
 				System.out.println("Computers Hand "+ compHand);
 			}
 			if(compHand == 21)
 			{
 				winnerTitle.setText("DEALER WINS");
+				System.out.println("Users Hand "+ userHand);
+				System.out.println("Computers Hand "+ compHand);
 				losses++;
+				games++;
+				String logger = new String("Game " + games + "\n" + userCards + "\n" + compCards + "\n" + winnerTitle.getText()+"\n");
+				log.record(logger);
+				log.saveFile();
 			}
 			if(compHand>21)
 			{
 				winnerTitle.setText("YOU WON");
+				System.out.println("Users Hand "+ userHand);
+				System.out.println("Computers Hand "+ compHand);
 				wins++;
+				games++;
+				String logger = new String("Game " + games + "\n" + userCards + "\n" + compCards + "\n" + winnerTitle.getText()+"\n");
+				log.record(logger);
+				log.saveFile();
+				System.out.println(logger);
 			}
 			if(compHand<21 && compHand>userHand)
 			{
 				winnerTitle.setText("DEALER WINS");
+				System.out.println("Users Hand "+ userHand);
+				System.out.println("Computers Hand "+ compHand);
 				losses++;
+				games++;
+				String logger = new String("Game " + games + "\n" + userCards + "\n" + compCards + "\n" + winnerTitle.getText()+"\n");
+				log.record(logger);
+				log.saveFile();
+				System.out.println(logger);
+			}
+			if(compHand<21 && compHand<userHand)
+			{
+				winnerTitle.setText("You WINS");
+				System.out.println("Users Hand "+ userHand);
+				System.out.println("Computers Hand "+ compHand);
+				losses++;
+				games++;
+				String logger = new String("Game " + games + "\n" + userCards + "\n" + compCards + "\n" + winnerTitle.getText()+"\n");
+				log.record(logger);
+				log.saveFile();
+				System.out.println(logger);
 			}
 			
 		}
@@ -208,24 +287,41 @@ public class ButtonListener implements ActionListener
 				{
 				SingleCard temp = gameDeck.getNextCard();
 				userHand += temp.value;
+				userCards += ", " + temp.name;
 				userPanel.add(temp);
 				validate();
 				repaint();
 				System.out.println("Users Hand "+ userHand);
+				
 				}
 				if(userHand>21)
 				{
 					winnerTitle.setText("DEALER WINS");
 					hideCard.setVisible(false);
 					secondCardComp.setVisible(true);
+					System.out.println("Users Hand "+ userHand);
+					System.out.println("Computers Hand "+ compHand);
 					losses ++;
+					games++;
+					String logger = new String("Game " + games + "\n" + userCards + "\n" + compCards + "\n" + winnerTitle.getText()+"\n");
+					log.record(logger);
+					log.saveFile();
+					System.out.println(logger);
 				}
 				if(userHand == 21)
 				{
+					
 					winnerTitle.setText("YOU WON");
 					hideCard.setVisible(false);
 					secondCardComp.setVisible(true);
+					System.out.println("Users Hand "+ userHand);
+					System.out.println("Computers Hand "+ compHand);
 					wins++;
+					games++;
+					String logger = new String("Game " + games + "\n" + userCards + "\n" + compCards + " \n" + winnerTitle.getText()+"\n");
+					log.record(logger);
+					log.saveFile();
+					System.out.println(logger);
 				}
 				
 				
@@ -233,9 +329,46 @@ public class ButtonListener implements ActionListener
 		}
 		else if(source == history)
 		{
+			String fileName = "gameplay.txt";
+			Font font = new Font("FixedSys", Font.PLAIN, 15);
+			JTextArea info2 = new JTextArea(100,100);
+			JScrollPane scrollPane = new JScrollPane(info2);
+			scrollPane.setVerticalScrollBarPolicy(
+	                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+			info2.setEditable(false);
 			System.out.println("History Button was pressed");
-			String leaderBoard = "Your Wins: " + wins + "\n" + "Your Losses: " + losses;
-			JOptionPane.showMessageDialog(null, leaderBoard, "LeaderBoard", JOptionPane.INFORMATION_MESSAGE);
+			try{
+			
+			inputStream = new Scanner(new File(fileName));
+			}
+			catch(FileNotFoundException e)
+			{
+				System.out.println("Error opening the file "+ fileName );
+			}
+			String display = new String("");
+			JFrame leaderFrame = new JFrame("GamePlay History");
+			JPanel leaderPanel = new JPanel();
+			leaderPanel.setLayout(new BoxLayout(leaderPanel,BoxLayout.Y_AXIS ));
+			leaderFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+			leaderFrame.setPreferredSize(new Dimension(600,700));
+			leaderFrame.setBackground(Color.black);
+			while(inputStream.hasNextLine())
+			{
+				display = inputStream.nextLine();
+				info2.append(display+newline);
+			}
+			String leaderBoard = "Your Wins: " + wins + " \n " + "Your Losses: " + losses;
+			JLabel info1 = new JLabel(leaderBoard);
+			info1.setFont(font);
+			//info2.setFont(font);
+			leaderPanel.add(info1);
+			leaderPanel.add(scrollPane);
+			leaderFrame.setContentPane(leaderPanel);
+			leaderFrame.validate();
+			leaderFrame.pack();
+			leaderFrame.setVisible(true);
+			
+			
 		}
 		else if(source == playAgain)
 		{
@@ -248,6 +381,8 @@ public class ButtonListener implements ActionListener
 
 public void reset()
 {
+	//Logging file
+	log.openFile("gameplay.txt");
 	
 	//Setting winnerTitle to original state
 	winnerTitle.setText("");
@@ -283,12 +418,26 @@ public void reset()
 	secondCardUser = gameDeck.getNextCard();
 	userHand += secondCardUser.value;
 	userPanel.add(secondCardUser);
+	userPanel.validate();
+	userPanel.repaint();
+	computerPanel.validate();
+	computerPanel.repaint();
 		
 	//Reseting the panel
 	validate();
 	repaint();
+	
+	//Printing out value of the hands and names of Card
+	userStr = new String("First: "+ firstCardUser.name + "\tSecond: " + secondCardUser.name);
+	compStr = new String("First: "+ firstCardComp.name + "\tSecond: " + secondCardComp.name);
+	System.out.println("User's Hand: \t\t" + userStr);
+	System.out.println("Computer's Hand: \t" + compStr);
+	System.out.println("Users Hand "+ userHand);
+	System.out.println("Computers Hand "+ compHand);
 		
 		
 }
+
+
 
 }
