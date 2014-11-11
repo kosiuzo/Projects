@@ -26,7 +26,7 @@ public class ArcadeGUI extends JPanel {
     public ArcadeGUI () {
     
 	
-	MListener listener = new MListener();  
+	MListhiener listener = new MListhiener();  
 	titleLabel = new JLabel(title);
 	ticTacLabel = new JLabel(ticTacToeImage);
 	blackJackLabel = new JLabel(blackJackImage);
@@ -43,7 +43,7 @@ public class ArcadeGUI extends JPanel {
     
     }
 
- 	public static class MListener implements MouseListener
+ 	public static class MListhiener implements MouseListener
  	{
 
 	public void mouseClicked(MouseEvent event)
@@ -60,11 +60,11 @@ public class ArcadeGUI extends JPanel {
 		}
 		else if(source == blackJackLabel)
 		{
-			blackJackPanel panel = new blackJackPanel();
+			howManyCardsPanel panel = new howManyCardsPanel();
 			ArcadeFrame.frame.setContentPane(panel);
 			ArcadeFrame.frame.validate();
 			ArcadeFrame.frame.repaint();
-			System.out.println("You have been sent to the black jack panel");
+			System.out.println("You have been sent to the how many cards panel");
 		}
 
   	}

@@ -1,0 +1,2 @@
+INDEX VERSION 1.127+C:\Users\Kosi\Documents\Uzodinma_Collins_proj4\P4-CollinsUzodinma-T13\.metadata\.plugins\org.eclipse.jdt.core
+2543679824.index
