@@ -42,12 +42,10 @@ public class ArcadeGUI extends JPanel {
 	setBackground(Color.BLACK);
     
     }
-    
-    
-    
+
  	public static class MListener implements MouseListener
  	{
-	
+
 	public void mouseClicked(MouseEvent event)
 	{
 		Object source = event.getSource();
@@ -59,7 +57,7 @@ public class ArcadeGUI extends JPanel {
 			ArcadeFrame.frame.repaint();
 			System.out.println("You have been sent to the TicTacToe panel");
 
-		}	
+		}
 		else if(source == blackJackLabel)
 		{
 			blackJackPanel panel = new blackJackPanel();
@@ -68,7 +66,7 @@ public class ArcadeGUI extends JPanel {
 			ArcadeFrame.frame.repaint();
 			System.out.println("You have been sent to the black jack panel");
 		}
-	 
+
   	}
 
   	public void mouseEntered(MouseEvent event)
