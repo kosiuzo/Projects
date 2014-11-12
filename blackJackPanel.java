@@ -10,11 +10,12 @@ public class blackJackPanel extends JPanel
 {
 public JButton split, stand, hit, history, playAgain;
 public static JPanel buttonPanel, computerPanel, userPanel;
-public static JLabel winnerTitle, whoWon, playerTurn;
-public static int compHand, userHand, splitHand, shoeValue, wins, losses, games;
+public static JLabel gameTitle, winnerTitle, whoWon, playerTurn;
+public static int compHand, userHand, splitHand, shoeValue, wins, losses;
 public static Card gameDeck;
 public SingleCard firstCardUser,secondCardUser, firstCardComp, secondCardComp;
 public ImageIcon hide = new ImageIcon("classic-cards/b1fv.png");
+public ImageIcon title = new ImageIcon("Images/bjTitle.png");
 public JLabel hideCard = new JLabel(hide);
 public String userStr,compStr, userCards, compCards;
 public GameLogging log = new GameLogging();
@@ -47,9 +48,6 @@ public blackJackPanel()
 	//Making the deck
 	gameDeck = new Card();
 	gameDeck.makeShoe(shoeValue);
-	//gameDeck.make1DeckArray();
-	//gameDeck.shuffleDeckArray();
-	//gameDeck.makeDeckStack();
 	
 	
 	//Setting the font to use for the panel
@@ -83,6 +81,11 @@ public blackJackPanel()
 	buttonPanel.add(history);
 	buttonPanel.add(playAgain);
 	//add(buttonPanel);
+	
+	//Adding title to top of panel
+	gameTitle = new JLabel(title);
+	gameTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
+	add(gameTitle);
 	
 	//Making the panel for the computer
 	computerPanel = new JPanel();

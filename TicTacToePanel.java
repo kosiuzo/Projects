@@ -95,7 +95,6 @@ public class TicTacToePanel extends JPanel
 		//Setting up undo button
 		undo = new JButton("UNDO");
 		undo.setFont(font);
-		undo.setMnemonic(KeyEvent.VK_Z);
 		undo.addActionListener(new BListener());
 
 		undo.setAlignmentX(Component.CENTER_ALIGNMENT);
