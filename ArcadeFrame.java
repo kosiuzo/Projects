@@ -50,7 +50,7 @@ public class ArcadeFrame {
 	about.addActionListener(listener);
 	game.add(mm);
 	game.add(quit);
-	help.add(htop);
+	//help.add(htop);
 	help.add(gs);
 	help.add(about);
 
@@ -111,7 +111,7 @@ public class ArcadeFrame {
 				JFrame leaderFrame = new JFrame("Manual");
 				JPanel leaderPanel = new JPanel();
 				leaderPanel.setLayout(new BoxLayout(leaderPanel,BoxLayout.Y_AXIS ));
-				leaderFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				//leaderFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 				leaderFrame.setPreferredSize(new Dimension(600,700));
 				leaderFrame.setBackground(Color.black);
 				while(inputStream.hasNextLine())
@@ -120,6 +120,10 @@ public class ArcadeFrame {
 					info2.append(display+newline);
 					System.out.println(display);
 				}
+				
+				JLabel d = new JLabel(display);
+				leaderPanel.add(d);
+				leaderFrame.add(d);
 				leaderPanel.add(scrollPane);
 				leaderFrame.setContentPane(leaderPanel);
 				leaderFrame.validate();

@@ -1,0 +1,8 @@
+Game 1
+User Cards: Five of Diamond, Seven of Diamond, Ace of Diamonds, King of Hearts
+Computer Cards: Five of Diamond, Six of Diamond
+DEALER WINS
+Game 2
+User Cards: Five of Diamond, Seven of Diamond, Ace of Diamonds, King of Hearts
+Computer Cards: Five of Diamond, Six of Diamond, Six of Hearts, Three of Hearts, Jack of Clubs
+YOU WON
