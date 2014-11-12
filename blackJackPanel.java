@@ -7,23 +7,24 @@ public class blackJackPanel extends JPanel
 {
     public JButton split, stand, hit, history, playAgain;
     public static JPanel buttonPanel, computerPanel, userPanel;
-    public static JLabel gameTitle, winnerTitle, whoWon, playerTurn;
+    public static JLabel gameTitle, dHand, pHand, winnerTitle, whoWon, playerTurn;
     public static int compHand, userHand, splitHand, shoeValue, wins, losses;
     public static Card gameDeck;
     public SingleCard firstCardUser,secondCardUser, firstCardComp, secondCardComp;
     public ImageIcon hide = new ImageIcon("classic-cards/b1fv.png");
     public ImageIcon title = new ImageIcon("Images/bjTitle.png");
+    public ImageIcon dH = new ImageIcon("Images/dHand.png");
+    public ImageIcon pH = new ImageIcon("Images/pHand.png");
     public JLabel hideCard = new JLabel(hide);
-
 
 public blackJackPanel()
 {
 	//Setting button Panel
 	buttonPanel = new JPanel();
-	
+	buttonPanel.setBackground(Color.GREEN);
 	
 	//Setting background of panel
-	setBackground(Color.BLACK);
+	setBackground(Color.GREEN);
 	
 	//Setting all the beginning values to zero
 	wins=losses=compHand=userHand=splitHand=0;
@@ -79,6 +80,10 @@ public blackJackPanel()
 	gameTitle.setAlignmentX(Component.CENTER_ALIGNMENT);
 	add(gameTitle);
 	
+	dHand = new JLabel(dH);
+	dHand.setAlignmentX(Component.CENTER_ALIGNMENT);
+	add(dHand);
+	
 	//Making the panel for the computer
 	computerPanel = new JPanel();
 	computerPanel.setLayout(new BoxLayout(computerPanel, BoxLayout.X_AXIS));
@@ -90,8 +95,11 @@ public blackJackPanel()
 	computerPanel.add(secondCardComp);
 	secondCardComp.setVisible(false);
 	computerPanel.add(hideCard);
+      	add(computerPanel);
 	
-	add(computerPanel);
+	pHand = new JLabel(pH);
+	pHand.setAlignmentX(Component.CENTER_ALIGNMENT);
+	add(pHand);
 	
 	//Making the panel for the user
 	userPanel = new JPanel();

@@ -22,7 +22,7 @@ public class ArcadeFrame {
     public ArcadeFrame () {
 	frame = new JFrame("Arcade");
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-	frame.setPreferredSize(new Dimension(600,700));
+	frame.setPreferredSize(new Dimension(800,700));
 	frame.setResizable(false);
 	
 	
@@ -87,7 +87,7 @@ public class ArcadeFrame {
 	    	JOptionPane.showMessageDialog(null, "To start pick one of choices to play the game of your choice" +
 					"\n\nMENUBAR OPTIONS\nMainMenu: Takes you back to the main menu to choose a selection to play \nQuit: Exits the program" +
 					 "\nGetStarted: Tells you information on how to use the program\n" +
-					 "About Options: tells you about the program", "Getting Started", JOptionPane.INFORMATION_MESSAGE);
+					 "About Options: tells you about the program\n\n" + "Tic-Tac-Toe: Click the player two box at the top right to change to computer player. \nPlayer one begins the game by choosing where to his their mark on the board." + "\n\nBlackjack: Selection the number of decks to start playing.", "Getting Started", JOptionPane.INFORMATION_MESSAGE);
 	    }
 	}
     }
