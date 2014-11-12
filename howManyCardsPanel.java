@@ -34,11 +34,11 @@ public class howManyCardsPanel extends JPanel
 	public JLabel num8 = new JLabel(8+"");
 	public JLabel title = new JLabel("      HOW MANY DECKS DO YOU WANT TO USE?      ");
 	public howManyCardsPanel()
-	{
+    {
 	    setBackground(Color.GREEN);
 	    title.setAlignmentX(Component.CENTER_ALIGNMENT);
-	    Font font = new Font("FixedSys", Font.PLAIN, 30);
-		Font font2 = new Font("FixedSys", Font.PLAIN, 30);
+		Font font = new Font("FixedSys", Font.PLAIN, 30);
+		Font font2 = new Font("FixedSys", Font.PLAIN, 15);
 		title.setFont(font2);
 		MListener listener = new MListener();
 		num1.setFont(font);

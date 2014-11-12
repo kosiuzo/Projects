@@ -1,0 +1,22 @@
+HOW TO PLAY
+Menu Bar
+•	Game
+o	Main Menu -it will send you back to the Main menu screen
+o	Quit- it will terminate the program
+•	Help
+o	How to Play- it will show this document
+o	Get Started- it will give you a quick overview of how to play
+o	About- Shows you version information and Developers
+Main Menu
+•	BlackJack Label – Will send you to pick how many decks to play with and proceed to BlackJack 
+Tic-Tac-Toe
+•	Score – It is shown in the top left for Player 1 and top right for Player 2
+•	To Play Against CutthroatComputer- Click on the Player 2 text label to switch to computer
+•	Undo Moves- Click the undo Button or press ALT+U
+BlackJack
+•	Pick A Deck- Pick between 1-8 decks to be in the shoe
+•	Split- If you get two of the same cards at the beginning you can split them
+•	Stand- You pass your turn and see if you win
+•	Hit- You ask the dealer for Cards
+•	History- Shows you the history of your gameplay
+•	PlayAgain- Allows you to play again with a new hand at any time during the game.
