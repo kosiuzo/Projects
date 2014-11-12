@@ -1,21 +1,18 @@
 import javax.swing.*;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
+
 import java.awt.event.*;
 import java.awt.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class ArcadeFrame {
-	public static JMenuItem quit, gs,about,mm;
+	public static JMenuItem quit, gs,about,mm,htop;
 	public static JMenuBar menu;
 	public static JMenu game, help;
 	public static JFrame frame;
+	public Scanner inputStream;
+	private final static String newline = "\n";
   
     
 
@@ -42,6 +39,9 @@ public class ArcadeFrame {
 	quit = new JMenuItem("Quit");
 	quit.setMnemonic(KeyEvent.VK_Q);
 	quit.addActionListener(listener);
+	htop = new JMenuItem("How to Play");
+	htop.setMnemonic(KeyEvent.VK_T);
+	htop.addActionListener(listener);
 	gs = new JMenuItem("Get Started");
 	gs.setMnemonic(KeyEvent.VK_G);
 	gs.addActionListener(listener);
@@ -50,6 +50,7 @@ public class ArcadeFrame {
 	about.addActionListener(listener);
 	game.add(mm);
 	game.add(quit);
+	help.add(htop);
 	help.add(gs);
 	help.add(about);
 
@@ -62,10 +63,11 @@ public class ArcadeFrame {
 	frame.pack();
 	frame.setVisible(true);
     }
-
-    public static class menuLister implements ActionListener {
+    
+    //Listener for menu bar
+    public class menuLister implements ActionListener {
 	public void actionPerformed(ActionEvent event) {
-		//Object source = e.getSource();
+		
 		Object source = event.getSource();
 	    if(source == quit)
 	    	System.exit(0);
@@ -88,6 +90,41 @@ public class ArcadeFrame {
 					"\n\nMENUBAR OPTIONS\nMainMenu: Takes you back to the main menu to choose a selection to play \nQuit: Exits the program" +
 					 "\nGetStarted: Tells you information on how to use the program\n" +
 					 "About Options: tells you about the program", "Getting Started", JOptionPane.INFORMATION_MESSAGE);
+	    }
+	    else if(source == htop)
+	    {
+	    	String fileName = "manual.txt";
+	    	JTextArea info2 = new JTextArea(100,100);
+			JScrollPane scrollPane = new JScrollPane(info2);
+			scrollPane.setVerticalScrollBarPolicy(
+	                JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+			info2.setEditable(false);
+			try{
+				
+				inputStream = new Scanner(new File(fileName));
+				}
+				catch(FileNotFoundException e)
+				{
+					System.out.println("Error opening the file "+ fileName );
+				}
+				String display = new String("");
+				JFrame leaderFrame = new JFrame("Manual");
+				JPanel leaderPanel = new JPanel();
+				leaderPanel.setLayout(new BoxLayout(leaderPanel,BoxLayout.Y_AXIS ));
+				leaderFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+				leaderFrame.setPreferredSize(new Dimension(600,700));
+				leaderFrame.setBackground(Color.black);
+				while(inputStream.hasNextLine())
+				{
+					display = inputStream.nextLine();
+					info2.append(display+newline);
+					System.out.println(display);
+				}
+				leaderPanel.add(scrollPane);
+				leaderFrame.setContentPane(leaderPanel);
+				leaderFrame.validate();
+				leaderFrame.pack();
+				leaderFrame.setVisible(true);
 	    }
 	}
     }

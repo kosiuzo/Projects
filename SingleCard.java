@@ -18,4 +18,15 @@ public SingleCard(Icon image)
 {
 	super(image);
 }
+
+public int getValue()
+{
+	return this.value;
+}
+
+public String getName()
+{
+	return this.name;
+}
+
 }

@@ -11,8 +11,8 @@ public class blackJackPanel extends JPanel
 public JButton split, stand, hit, history, playAgain;
 public static JPanel buttonPanel, computerPanel, userPanel;
 public static JLabel gameTitle, winnerTitle, whoWon, playerTurn;
-public static int compHand, userHand, splitHand, shoeValue, wins, losses;
-public static Card gameDeck;
+public static int compHand, userHand, splitHand, shoeValue, wins, losses, games;
+public static Shoe gameDeck;
 public SingleCard firstCardUser,secondCardUser, firstCardComp, secondCardComp;
 public ImageIcon hide = new ImageIcon("classic-cards/b1fv.png");
 public ImageIcon title = new ImageIcon("Images/bjTitle.png");
@@ -46,7 +46,7 @@ public blackJackPanel()
 	setLayout(new BoxLayout(this,BoxLayout.Y_AXIS));
 	
 	//Making the deck
-	gameDeck = new Card();
+	gameDeck = new Shoe();
 	gameDeck.makeShoe(shoeValue);
 	
 	
@@ -391,7 +391,7 @@ public void reset()
 	winnerTitle.setText("");
 	
 	//Making the deck
-	gameDeck = new Card();
+	gameDeck = new Shoe();
 	gameDeck.makeShoe(shoeValue);
 		
 	//Setting all the beginning values to zero

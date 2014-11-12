@@ -36,7 +36,7 @@ public class howManyCardsPanel extends JPanel
 	public howManyCardsPanel()
 	{
 		Font font = new Font("FixedSys", Font.PLAIN, 30);
-		Font font2 = new Font("FixedSys", Font.PLAIN, 30);
+		Font font2 = new Font("FixedSys", Font.PLAIN, 15);
 		title.setFont(font2);
 		MListener listener = new MListener();
 		num1.setFont(font);
